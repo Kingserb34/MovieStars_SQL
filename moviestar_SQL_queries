@@ -1,0 +1,78 @@
+/* Actor Table */
+CREATE TABLE actors(
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    birth_year INTEGER,
+    nationality TEXT
+);
+
+/* Movies table */
+CREATE TABLE movies(
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    release_year INTEGER,
+    genre TEXT
+);
+
+/* Actor_movie junction table */
+CREATE TABLE actor_movie(
+    actor_id INTEGER,
+    movie_id INTEGER,
+    PRIMARY KEY (actor_id, movie_id)
+);
+
+/* Awards table */
+CREATE TABLE awards(
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    category TEXT,
+    year INTEGER,
+    actor_id INTEGER
+);
+/* Insert sample data into Actors */
+INSERT INTO Actors (id, name, birth_year, nationality) VALUES
+(1, 'Leonardo DiCaprio', 1974, 'American'),
+(2, 'Scarlett Johansson', 1984, 'American'),
+(3, 'Denzel Washington', 1954, 'American'),
+(4, 'Jennifer Lawrence', 1990, 'American');
+
+/* Insert sample data into Movies */
+INSERT INTO Movies (id, title, release_year, genre) VALUES
+(1, 'Inception', 2010, 'Sci-Fi'),
+(2, 'The Revenant', 2015, 'Adventure'),
+(3, 'Black Widow', 2021, 'Action'),
+(4, 'Training Day', 2001, 'Crime'),
+(5, 'Silver Linings Playbook', 2012, 'Romance');
+
+/* Insert data into Actor_Movie */
+INSERT INTO Actor_Movie (actor_id, movie_id) VALUES
+(1, 1), -- Leonardo DiCaprio in Inception
+(1, 2), -- Leonardo DiCaprio in The Revenant
+(2, 3), -- Scarlett Johansson in Black Widow
+(3, 4), -- Denzel Washington in Training Day
+(4, 5); -- Jennifer Lawrence in Silver Linings Playbook
+
+/* Insert sample data into Awards */
+INSERT INTO Awards (id, name, category, year, actor_id) VALUES
+(1, 'Academy Award', 'Best Actor', 2016, 1), -- Leonardo DiCaprio for The Revenant
+(2, 'BAFTA', 'Best Actress', 2014, 4), -- Jennifer Lawrence for American Hustle
+(3, 'Golden Globe', 'Best Actor', 2002, 3); -- Denzel Washington for Training Day
+ 
+ /* Movies actors have starred in */
+ SELECT name, title
+ FROM actors
+ JOIN actor_movie ON actors.id = actor_movie.actor_id
+ JOIN movies ON actor_movie.movie_id = movies.id
+ ;
+ 
+ /* Actors who have won award */
+ SELECT actors.name, category, year
+ FROM actors
+ JOIN awards ON actors.id = awards.actor_id
+ ;
+ 
+ /* Actors with the same nationality */
+ SELECT a.name AS actor1, b.name AS actor2, a.nationality
+ FROM actors a
+ JOIN actors b ON a.nationality = b.nationality AND a.id < b.id
+ ;
